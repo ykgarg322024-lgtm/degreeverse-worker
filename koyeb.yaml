@@ -1,0 +1,29 @@
+# Koyeb deployment config
+# This file is auto-read by Koyeb when you deploy from GitHub
+
+name: yash-whatsapp-worker
+
+services:
+  - name: worker
+    type: web
+    git:
+      branch: main
+    build:
+      buildpack:
+        build_command: npm install
+        run_command: npm start
+    ports:
+      - port: 3001
+        protocol: http
+    health_checks:
+      - path: /health
+        port: 3001
+        interval: 30
+        timeout: 10
+        unhealthy_threshold: 3
+        healthy_threshold: 1
+    autoscaling:
+      min: 1
+      max: 1
+    instance_types:
+      - type: free
